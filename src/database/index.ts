@@ -1,0 +1,1 @@
+export { default as masterDataSource } from './master-data-source';
