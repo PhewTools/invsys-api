@@ -1,0 +1,20 @@
+import { PrimaryGeneratedColumn, Column, Entity, OneToMany, UpdateDateColumn, CreateDateColumn } from "typeorm";
+import { ProductEntity } from "../../product/entities/product.entity";
+
+@Entity({ name: 'categories' })
+export class CategoryEntity {
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
+
+    @Column()
+    name: string;
+
+    @OneToMany(() => ProductEntity, (product) => product.category)
+    products: ProductEntity[];
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
+}

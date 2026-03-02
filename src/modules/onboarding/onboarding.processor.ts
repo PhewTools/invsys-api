@@ -35,7 +35,7 @@ export class OnboardingProcessor extends WorkerHost {
     try {
       await this.tenantService.updateStatus(tenantId, TenantStatus.PROVISIONING);
       await this.createSchema(tenant.schemaName);
-      await this.provisionSchemas(tenantId);
+      await this.provisionSchemaTables(tenantId);
       await this.tenantService.updateStatus(tenantId, TenantStatus.ACTIVE);
       this.logger.log(`Tenant ${tenantId} provisioned successfully (schema: ${tenant.schemaName})`);
     } catch (err) {
@@ -59,7 +59,7 @@ export class OnboardingProcessor extends WorkerHost {
       await queryRunner.release();
     }
   }
-  async provisionSchemas(tenantId: string): Promise<void> {
+  async provisionSchemaTables(tenantId: string): Promise<void> {
     const tenant = await this.tenantService.findById(tenantId);
     if (!tenant){
       throw new NotFoundException(`Tenant ${tenantId} not found`);
@@ -67,9 +67,6 @@ export class OnboardingProcessor extends WorkerHost {
     try {
       await this.tenantService.updateStatus(tenantId, TenantStatus.POPULATING);
       const dataSource = await createTenantDataSource(tenant.schemaName, true);
-      // Run all pending migrations for the tenant's schema.
-      await dataSource.runMigrations();
-      this.logger.log(`Migrations completed for tenant ${tenant.id} (schema: ${tenant.schemaName})`);
       await dataSource.destroy();
     } catch (error) {
       this.logger.error(`Failed to provision schema for tenant ${tenantId}`, error);

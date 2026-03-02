@@ -13,7 +13,6 @@ export default new DataSource({
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: 'postgres',
-    schema: 'tenant_3',
     entities: [__dirname + '/../modules/**/entities/*.entity{.ts,.js}'],
     migrations: [__dirname + '/../migrations/*.ts{.js}'],
 });

@@ -1,10 +1,12 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BullModule } from '@nestjs/bullmq';
 import { TenantModule } from './modules/tenant/tenant.module';
 import { OnboardingModule } from './modules/onboarding/onboarding.module';
 import { TenantEntity } from './modules/tenant/entities/tenant.entity';
+import { TenantResolutionMiddleware } from './core/middlewares/tenant-resolution.middleware';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -35,8 +37,15 @@ import { TenantEntity } from './modules/tenant/entities/tenant.entity';
     }),
     TenantModule,
     OnboardingModule,
+    UserModule
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(TenantResolutionMiddleware)
+    .exclude({ path: 'onboarding', method: RequestMethod.ALL })
+    .forRoutes('*')
+  }
+}

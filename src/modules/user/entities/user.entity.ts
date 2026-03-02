@@ -1,5 +1,4 @@
 import { PrimaryGeneratedColumn, Column, Entity } from "typeorm";
-
 @Entity({ name: 'users' })
 export class UserEntity {
     @PrimaryGeneratedColumn('uuid')
@@ -10,4 +9,10 @@ export class UserEntity {
 
     @Column()
     password: string;
+
+    @Column()
+    name: string;
+
+    @Column()
+    role: string;
 }
