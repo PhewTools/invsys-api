@@ -7,6 +7,9 @@ export class RoleEntity {
 
     @Column({ unique: true})
     name: string;
+
+    @Column()
+    description: string;
 }
 
 export enum Role {

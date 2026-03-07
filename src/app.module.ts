@@ -7,6 +7,7 @@ import { OnboardingModule } from './modules/onboarding/onboarding.module';
 import { TenantEntity } from './modules/tenant/entities/tenant.entity';
 import { TenantResolutionMiddleware } from './core/middlewares/tenant-resolution.middleware';
 import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './core/auth/auth.module';
 
 @Module({
   imports: [
@@ -37,7 +38,8 @@ import { UserModule } from './modules/user/user.module';
     }),
     TenantModule,
     OnboardingModule,
-    UserModule
+    UserModule,
+    AuthModule
   ],
   controllers: [],
   providers: [],

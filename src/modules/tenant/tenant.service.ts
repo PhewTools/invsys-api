@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { TenantEntity, TenantStatus } from './entities/tenant.entity.js';
+import { TenantEntity, TenantStatus } from './entities/tenant.entity';
 
 interface CreateTenantParams {
   readonly name: string;
@@ -41,5 +41,8 @@ export class TenantService {
    */
   async updateStatus(tenantId: string, status: TenantStatus): Promise<void> {
     await this.tenantRepository.update(tenantId, { status });
+  }
+  async findAllActive(): Promise<TenantEntity[]> {
+    return this.tenantRepository.find({ where: { status: TenantStatus.ACTIVE } });
   }
 }

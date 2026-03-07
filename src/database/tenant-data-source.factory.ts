@@ -1,4 +1,5 @@
 import { DataSource } from 'typeorm';
+import { SeederOptions } from 'typeorm-extension';
 
 /**
  * Creates a TypeORM DataSource scoped to a specific tenant schema.
@@ -17,8 +18,9 @@ export const createTenantDataSource = async (
     database: 'postgres',
     schema: schemaName,
     synchronize: synchronize,
+    logging: true,
     entities: [__dirname + '/../modules/**/entities/*.entity{.ts,.js}'],
-    migrations: [__dirname + '/../migrations/*.ts{.js}'],
+    migrations: [__dirname + '/../migrations/**/*.migration{.ts,.js}']
   });
   await dataSource.initialize();
   return dataSource;

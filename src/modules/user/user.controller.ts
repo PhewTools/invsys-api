@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Post, UseGuards } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { UserEntity } from "./entities/user.entity";
 import type { CreateUserDto } from "./dto/create-user-dto";
+import { AuthGuard } from "src/core/auth/auth.guard";
 
 @Controller('users')
 export class UserController {
@@ -13,7 +14,19 @@ export class UserController {
     }
 
     @Post('new')
-    async create(@Body() dto: CreateUserDto): Promise<UserEntity> {
-        return this.userService.create(dto);
+    async create(@Body() dto: CreateUserDto) {
+        const result =await this.userService.create(dto);
+        if(result){
+            return {
+                status: HttpStatus.CREATED,
+                message: 'User created successfully'
+            };
+        }
+    }
+
+    @UseGuards(AuthGuard)
+    @Get('roles')
+    async getRoles(){
+        return this.userService.getRoles();
     }
 }

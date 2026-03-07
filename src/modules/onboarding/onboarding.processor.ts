@@ -2,7 +2,7 @@ import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Logger, NotFoundException } from '@nestjs/common';
 import { Job } from 'bullmq';
 import { DataSource } from 'typeorm';
-import { TenantService } from '../tenant/tenant.service.js';
+import { TenantService } from '../tenant/tenant.service';
 import { TenantStatus } from '../tenant/entities/tenant.entity';
 import { ONBOARDING_QUEUE } from './onboarding.constants';
 import { createTenantDataSource } from '../../database/tenant-data-source.factory';
@@ -17,7 +17,6 @@ export class OnboardingProcessor extends WorkerHost {
 
   constructor(
     private readonly tenantService: TenantService,
-    private readonly dataSource: DataSource,
   ) {
     super();
   }
@@ -49,7 +48,9 @@ export class OnboardingProcessor extends WorkerHost {
    * Creates a new PostgreSQL schema for the tenant.
    */
   private async createSchema(schemaName: string): Promise<void> {
-    const queryRunner = this.dataSource.createQueryRunner();
+    const dataSource = await createTenantDataSource('public');
+    await dataSource.initialize();
+    const queryRunner = dataSource.createQueryRunner();
     try {
       await queryRunner.query(
         `CREATE SCHEMA IF NOT EXISTS "${schemaName}"`,
@@ -57,6 +58,7 @@ export class OnboardingProcessor extends WorkerHost {
       this.logger.log(`Schema "${schemaName}" created`);
     } finally {
       await queryRunner.release();
+      await dataSource.destroy();
     }
   }
   async provisionSchemaTables(tenantId: string): Promise<void> {
@@ -67,6 +69,11 @@ export class OnboardingProcessor extends WorkerHost {
     try {
       await this.tenantService.updateStatus(tenantId, TenantStatus.POPULATING);
       const dataSource = await createTenantDataSource(tenant.schemaName, true);
+      const queryRunner = dataSource.createQueryRunner();
+      await queryRunner.query(`SET search_path TO ${tenant.schemaName}, public`);
+      await queryRunner.query(`INSERT INTO roles (name, description) VALUES ('admin', 'Admin role'), ('user', 'User role');`);
+      await queryRunner.query(`INSERT INTO categories (name, description) VALUES ('admin', 'Admin role'), ('user', 'User role');`);
+      await queryRunner.release();
       await dataSource.destroy();
     } catch (error) {
       this.logger.error(`Failed to provision schema for tenant ${tenantId}`, error);

@@ -10,7 +10,7 @@ export class CategoryEntity {
     name: string;
 
     @OneToMany(() => ProductEntity, (product) => product.category)
-    products: ProductEntity[];
+    products: ProductEntity[] | null;
 
     @CreateDateColumn()
     createdAt: Date;
