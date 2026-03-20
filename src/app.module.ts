@@ -8,6 +8,8 @@ import { TenantEntity } from './modules/tenant/entities/tenant.entity';
 import { TenantResolutionMiddleware } from './core/middlewares/tenant-resolution.middleware';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './core/auth/auth.module';
+import { WarehouseModule } from './modules/warehouse/warehouse.module';
+import { InventoryModule } from './modules/inventory/inventory.module';
 
 @Module({
   imports: [
@@ -39,7 +41,9 @@ import { AuthModule } from './core/auth/auth.module';
     TenantModule,
     OnboardingModule,
     UserModule,
-    AuthModule
+    AuthModule,
+    WarehouseModule,
+    InventoryModule
   ],
   controllers: [],
   providers: [],

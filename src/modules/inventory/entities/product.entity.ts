@@ -1,6 +1,7 @@
 import { CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Column } from "typeorm";
-import { CategoryEntity } from "../../category/entities/category.entity";
+import { CategoryEntity } from "./category.entity";
+import { SupplierEntity } from "./supplier.entity";
 
 @Entity({ name: 'products' })
 export class ProductEntity {
@@ -9,6 +10,13 @@ export class ProductEntity {
 
     @Column()
     name: string;
+
+    @Column()
+    supplierId: string;
+
+    @ManyToOne(() => SupplierEntity, (supplier) => supplier.id)
+    @JoinColumn({ name: 'supplierId' })
+    supplier: SupplierEntity;
 
     @Column()
     categoryId: string;
@@ -26,8 +34,8 @@ export class ProductEntity {
     @Column()
     sellingPrice: number;
 
-    @Column()
-    quantity: number;
+    @Column({ nullable: true})
+    imageUrl: string;
 
     @CreateDateColumn()
     createdAt: Date;
