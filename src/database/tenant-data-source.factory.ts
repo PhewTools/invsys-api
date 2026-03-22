@@ -1,6 +1,4 @@
 import { DataSource } from 'typeorm';
-import { SeederOptions } from 'typeorm-extension';
-
 /**
  * Creates a TypeORM DataSource scoped to a specific tenant schema.
  * Uses the same master database but sets the search_path to the tenant schema.

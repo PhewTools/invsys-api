@@ -10,6 +10,7 @@ import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './core/auth/auth.module';
 import { WarehouseModule } from './modules/warehouse/warehouse.module';
 import { InventoryModule } from './modules/inventory/inventory.module';
+import { SalesModule } from './modules/sales/sales.module';
 
 @Module({
   imports: [
@@ -43,7 +44,8 @@ import { InventoryModule } from './modules/inventory/inventory.module';
     UserModule,
     AuthModule,
     WarehouseModule,
-    InventoryModule
+    InventoryModule,
+    SalesModule
   ],
   controllers: [],
   providers: [],
