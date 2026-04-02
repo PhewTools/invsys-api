@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NestMiddleware } from "@nestjs/common";
 import { Request, Response, NextFunction } from "express";
 import { ConfigService } from '@nestjs/config';
-import { TenantService } from "../../modules/tenant/tenant.service";
+import { TenantService } from "../../modules/tenant/services/tenant.service";
 import { TenantStatus } from "src/modules/tenant/entities/tenant.entity";
 import { tenantStorage } from "src/modules/tenant/tenant-storage";
 

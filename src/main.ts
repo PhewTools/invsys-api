@@ -11,6 +11,7 @@ async function bootstrap(): Promise<void> {
       transform: true,
     }),
   );
+  app.enableCors({origin: '*'});
   await app.listen(process.env.PORT ?? 3000);
 }
 void bootstrap();

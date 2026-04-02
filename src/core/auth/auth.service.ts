@@ -42,6 +42,7 @@ export class AuthService {
     }
     const payload: AuthTokenPayload = {
       sub: user.id,
+      userFullName: user.name,
       tenantId: tenantContext.tenantId,
       role: user.role,
       email: user.email,

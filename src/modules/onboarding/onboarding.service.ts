@@ -1,7 +1,7 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
-import { TenantService } from '../tenant/tenant.service';
+import { TenantService } from '../tenant/services/tenant.service';
 import { TenantEntity, TenantStatus } from '../tenant/entities/tenant.entity';
 import { CreateTenantDto } from './dto/create-tenant.dto';
 import { ONBOARDING_QUEUE } from './onboarding.constants';

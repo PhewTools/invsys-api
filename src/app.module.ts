@@ -54,6 +54,8 @@ export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(TenantResolutionMiddleware)
     .exclude({ path: 'onboarding', method: RequestMethod.ALL })
+    .exclude({ path: 'tenants/:id', method: RequestMethod.GET })
+    .exclude({ path: 'tenants/byname', method: RequestMethod.GET })
     .forRoutes('*')
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { TenantEntity, TenantStatus } from './entities/tenant.entity';
+import { TenantEntity, TenantStatus } from '../entities/tenant.entity';
 
 interface CreateTenantParams {
   readonly name: string;
@@ -27,6 +27,11 @@ export class TenantService {
       status: TenantStatus.PENDING,
     });
     return this.tenantRepository.save(tenant);
+  }
+
+  async findIdByName(name: string): Promise<TenantEntity | null> {
+    const tenant = await this.tenantRepository.findOneBy({name: name});
+    return tenant ?? null;
   }
 
   /**

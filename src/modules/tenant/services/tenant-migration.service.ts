@@ -1,5 +1,5 @@
 import { createTenantDataSource } from "src/database/tenant-data-source.factory";
-import { TenantService } from "./tenant.service";
+import { TenantService } from "../services/tenant.service";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { Query } from "typeorm/driver/Query.js";
 

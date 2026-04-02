@@ -2,7 +2,7 @@ import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Logger, NotFoundException } from '@nestjs/common';
 import { Job } from 'bullmq';
 import { DataSource } from 'typeorm';
-import { TenantService } from '../tenant/tenant.service';
+import { TenantService } from '../tenant/services/tenant.service';
 import { TenantStatus } from '../tenant/entities/tenant.entity';
 import { ONBOARDING_QUEUE } from './onboarding.constants';
 import { createTenantDataSource } from '../../database/tenant-data-source.factory';
@@ -49,7 +49,6 @@ export class OnboardingProcessor extends WorkerHost {
    */
   private async createSchema(schemaName: string): Promise<void> {
     const dataSource = await createTenantDataSource('public');
-    await dataSource.initialize();
     const queryRunner = dataSource.createQueryRunner();
     try {
       await queryRunner.query(
@@ -72,7 +71,6 @@ export class OnboardingProcessor extends WorkerHost {
       const queryRunner = dataSource.createQueryRunner();
       await queryRunner.query(`SET search_path TO ${tenant.schemaName}, public`);
       await queryRunner.query(`INSERT INTO roles (name, description) VALUES ('admin', 'Admin role'), ('user', 'User role');`);
-      await queryRunner.query(`INSERT INTO categories (name, description) VALUES ('admin', 'Admin role'), ('user', 'User role');`);
       await queryRunner.release();
       await dataSource.destroy();
     } catch (error) {

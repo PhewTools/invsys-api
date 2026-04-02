@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../app.module';
-import { TenantMigrationRunner } from '../modules/tenant/tenant-migration.service';
+import { TenantMigrationRunner } from '../modules/tenant/services/tenant-migration.service';
 
 interface CliArgs {
   readonly tenantId?: string;
